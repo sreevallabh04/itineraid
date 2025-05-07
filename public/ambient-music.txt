@@ -1,0 +1,17 @@
+## Ambient Music Instructions
+
+To complete the immersive experience of ItinerAid, please add an ambient music file with the filename "ambient-music.mp3" to this public directory.
+
+### Recommended sources for royalty-free ambient music:
+
+1. Pixabay: https://pixabay.com/music/search/ambient/
+2. Free Music Archive: https://freemusicarchive.org/genre/Ambient/
+3. SoundCloud (with Creative Commons license): https://soundcloud.com/search/sounds?q=ambient&filter.license=to_use_commercially
+
+### Recommended characteristics:
+- Soft, atmospheric sounds
+- No vocals or minimal vocals
+- 2-5 minute duration (it will loop automatically)
+- Travel or relaxation theme
+
+After adding the file, the audio player functionality will work automatically when users toggle the music control on the dashboard page.
