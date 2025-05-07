@@ -1,17 +1,25 @@
-## Ambient Music Instructions
+# Ambient Music Instructions
 
-To complete the immersive experience of ItinerAid, please add an ambient music file with the filename "ambient-music.mp3" to this public directory.
+## Important: 404 Error Fix Required
+To fix the 404 error in the dashboard and complete the immersive experience of ItinerAid, you need to add an ambient music file with the filename "ambient-music.mp3" to this public directory.
 
-### Recommended sources for royalty-free ambient music:
+## How to Add the Audio File:
+1. Download a suitable ambient music track (see recommended sources below)
+2. Rename the file to "ambient-music.mp3"
+3. Place it in the public directory (same location as this text file)
+4. Restart the server if necessary
 
+## Recommended sources for royalty-free ambient music:
 1. Pixabay: https://pixabay.com/music/search/ambient/
 2. Free Music Archive: https://freemusicarchive.org/genre/Ambient/
 3. SoundCloud (with Creative Commons license): https://soundcloud.com/search/sounds?q=ambient&filter.license=to_use_commercially
+4. Uppbeat: https://uppbeat.io/browse/ambient
 
-### Recommended characteristics:
+## Recommended characteristics:
 - Soft, atmospheric sounds
 - No vocals or minimal vocals
 - 2-5 minute duration (it will loop automatically)
 - Travel or relaxation theme
+- Lower file size (under 5MB) for faster loading
 
-After adding the file, the audio player functionality will work automatically when users toggle the music control on the dashboard page.
+After adding the file, the audio player functionality will work automatically when users toggle the music control on the dashboard page, enhancing the cinematic travel planning experience.

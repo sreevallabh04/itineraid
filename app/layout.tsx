@@ -1,12 +1,13 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
+import { NavBar } from "@/components/navigation/navbar"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Itineraid - Your Cinematic Travel Planner",
+  title: "ItinerAid - Your Cinematic Travel Planner",
   description: "Plan your journey with a cinematic, breathtaking travel itinerary planner",
   icons: {
     icon: [
@@ -30,10 +31,13 @@ export const metadata: Metadata = {
   },
   manifest: "https://itineraid.vercel.app/manifest.json",
   generator: 'v0.dev',
+}
+
+export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: dark)", color: "#000000" },
     { media: "(prefers-color-scheme: light)", color: "#5f22d9" }
-  ]
+  ],
 }
 
 export default function RootLayout({
@@ -43,7 +47,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} bg-black text-white min-h-screen`}>
+        <NavBar />
+        <main>
+          {children}
+        </main>
+      </body>
     </html>
   )
 }

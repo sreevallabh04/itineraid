@@ -21,8 +21,76 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import html2canvas from "html2canvas"
 import { jsPDF } from "jspdf"
 
+// Type Definitions
+interface Activity {
+  name: string;
+  location: string;
+  time: string;
+  duration: string;
+  pickup: string;
+  image: string;
+}
+
+interface Accommodation {
+  name: string;
+  image: string;
+  status: "Confirmed" | "Pending";
+  rating: number;
+  nights: number;
+  veryGood: boolean;
+  checkIn?: string; 
+  checkOut?: string;
+}
+
+interface Flight {
+  origin: string;
+  originFull: string;
+  destination: string;
+  destinationFull: string;
+  airline: string;
+  flightNumber: string;
+  departure?: string;
+}
+
+interface Destination {
+  image: string;
+  flight: Flight;
+  accommodations: Accommodation[];
+  activities: Activity[][];
+}
+
+type DestinationData = Record<string, Destination>;
+
+interface TripDay {
+  date: string;
+  day: string;
+  dayNum: string;
+  month: string;
+  activities: Activity[];
+}
+
+interface TripData {
+  destination: string;
+  startDate: string;
+  endDate: string;
+  duration: string;
+  companions: string;
+  activities: number; // Total number of activities
+  flight: Flight;
+  accommodations: Accommodation[];
+  days: TripDay[];
+}
+
+interface User {
+  name?: string;
+  email?: string;
+  avatar?: string;
+  isAuthenticated?: boolean;
+  selectedDestination?: string;
+}
+
 // Destination data with real images
-const destinationData = {
+const destinationData: DestinationData = {
   "Tokyo": {
     image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=1974&auto=format&fit=crop",
     flight: {
@@ -479,7 +547,7 @@ const generateTripDates = () => {
   endDate.setDate(startDate.getDate() + 6); // 7-day trip
   
   // Format dates
-  const formatDate = (date) => {
+  const formatDate = (date: Date): string => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
@@ -487,13 +555,13 @@ const generateTripDates = () => {
   };
   
   // Get day name
-  const getDayName = (date) => {
+  const getDayName = (date: Date): string => {
     const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     return days[date.getDay()];
   };
   
   // Get month name
-  const getMonthName = (date) => {
+  const getMonthName = (date: Date): string => {
     const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     return months[date.getMonth()];
   };
@@ -522,12 +590,12 @@ const generateTripDates = () => {
 };
 
 // Generate trip data based on selected destination
-const generateTripData = (destination = "Tokyo") => {
+const generateTripData = (destination: string = "Tokyo"): TripData => {
   const dates = generateTripDates();
   const destData = destinationData[destination] || destinationData["Tokyo"];
   
   // Calculate accommodations with real check-in/out dates
-  const accommodations = destData.accommodations.map((acc, index) => {
+  const accommodations: Accommodation[] = destData.accommodations.map((acc: Accommodation, index: number) => {
     // Calculate check-in date (first day for first accommodation, halfway through for second)
     const checkInDate = new Date();
     checkInDate.setDate(checkInDate.getDate() + 1 + (index === 0 ? 0 : 3));
@@ -537,7 +605,7 @@ const generateTripData = (destination = "Tokyo") => {
     checkOutDate.setDate(checkInDate.getDate() + acc.nights);
     
     // Format dates with time
-    const formatDateTime = (date, isCheckIn) => {
+    const formatDateTime = (date: Date, isCheckIn: boolean): string => {
       const day = date.getDate().toString().padStart(2, '0');
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const year = date.getFullYear();
@@ -553,9 +621,9 @@ const generateTripData = (destination = "Tokyo") => {
   });
   
   // Generate days with activities
-  const tripDays = dates.days.map((day, index) => {
+  const tripDays: TripDay[] = dates.days.map((day, index: number) => {
     // Get activities for this day (cycling through available activities if needed)
-    const dayActivities = destData.activities[index % destData.activities.length] || [];
+    const dayActivities: Activity[] = destData.activities[index % destData.activities.length] || [];
     return {
       ...day,
       activities: dayActivities
@@ -580,13 +648,13 @@ const generateTripData = (destination = "Tokyo") => {
 
 export default function Dashboard() {
   const router = useRouter()
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeDay, setActiveDay] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
   const [selectedDestination, setSelectedDestination] = useState("Tokyo")
-  const [tripData, setTripData] = useState<any>(null)
+  const [tripData, setTripData] = useState<TripData | null>(null)
 
   useEffect(() => {
     // Check if user is authenticated using localStorage
@@ -809,7 +877,7 @@ export default function Dashboard() {
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            {tripData.accommodations.map((accommodation, index) => (
+            {tripData.accommodations.map((accommodation: Accommodation, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -876,7 +944,7 @@ export default function Dashboard() {
           {/* Day selector */}
           <div className="overflow-x-auto pb-2 mb-4">
             <div className="flex gap-2 min-w-max">
-              {tripData.days.map((day, index) => (
+              {tripData.days.map((day: TripDay, index: number) => (
                 <button
                   key={index}
                   onClick={() => setActiveDay(index)}
@@ -903,7 +971,7 @@ export default function Dashboard() {
 
             <div className="space-y-4">
               {tripData.days[activeDay].activities.length > 0 ? (
-                tripData.days[activeDay].activities.map((activity, index) => (
+                tripData.days[activeDay].activities.map((activity: Activity, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 10 }}
@@ -958,7 +1026,12 @@ export default function Dashboard() {
             <MapPinIcon className="h-5 w-5 text-lime-500" />
             <span className="text-xs">Trips</span>
           </Button>
-          <Button variant="ghost" size="sm" className="flex flex-col items-center gap-1 h-auto py-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex flex-col items-center gap-1 h-auto py-1"
+            onClick={() => router.push("/calendar")}
+          >
             <CalendarIcon className="h-5 w-5" />
             <span className="text-xs">Calendar</span>
           </Button>
