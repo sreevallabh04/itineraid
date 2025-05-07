@@ -290,20 +290,23 @@ export default function ExplorePage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="sticky top-0 z-10 bg-black/90 backdrop-blur-lg border-b border-zinc-800 px-4 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-2">
+        <div className="container-responsive max-w-7xl mx-auto flex items-center justify-between">
+          <Link href="/dashboard" className="flex items-center gap-2 fade-in-animation">
             <ChevronLeftIcon className="h-5 w-5" />
             <h1 className="text-xl font-bold">Explore Destinations</h1>
           </Link>
 
-          <Avatar className="bg-orange-500 cursor-pointer" onClick={handleSignOut}>
+          <Avatar 
+            className="bg-orange-500 cursor-pointer transition-transform hover:scale-105" 
+            onClick={handleSignOut}
+          >
             <AvatarImage src={user?.avatar || ""} alt={user?.name} />
             <AvatarFallback>{user?.name?.charAt(0) || "T"}</AvatarFallback>
           </Avatar>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="container-responsive max-w-7xl mx-auto py-6 slide-up-animation">
         {/* Search Bar */}
         <div className="mb-6">
           <div className="relative">

@@ -678,11 +678,25 @@ export default function Dashboard() {
     
     setLoading(false)
     
-    // Initialize audio
+    // Initialize audio with error handling for missing file
     if (typeof window !== "undefined") {
-      const audioElement = new Audio("/ambient-music.mp3")
-      audioElement.loop = true
-      setAudio(audioElement)
+      try {
+        const audioElement = new Audio("/ambient-music.mp3")
+        audioElement.loop = true
+        
+        // Add error handling for missing audio file
+        audioElement.onerror = () => {
+          console.log("Audio file could not be loaded. Using silent audio fallback.")
+          // Create a silent audio element as fallback
+          const silentAudio = new Audio()
+          silentAudio.loop = true
+          setAudio(silentAudio)
+        }
+        
+        setAudio(audioElement)
+      } catch (error) {
+        console.error("Error initializing audio:", error)
+      }
     }
 
     return () => {
@@ -746,20 +760,20 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="sticky top-0 z-10 bg-black/90 backdrop-blur-lg border-b border-zinc-800 px-4 py-3">
-        <div className="max-w-md mx-auto flex items-center justify-between">
-          <div className="flex flex-col">
+        <div className="container-responsive max-w-md flex items-center justify-between">
+          <div className="flex flex-col fade-in-animation">
             <h1 className="text-xl font-bold">Hello {user?.name || "Traveler"}!</h1>
             <p className="text-sm text-gray-400">Ready for your {tripData.destination} adventure?</p>
           </div>
 
-          <Avatar className="bg-gradient-to-tr from-indigo-500 to-purple-600">
+          <Avatar className="bg-gradient-to-tr from-indigo-500 to-purple-600 transition-transform hover:scale-105">
             <AvatarImage src={user?.avatar || ""} alt={user?.name} />
             <AvatarFallback>{user?.name?.charAt(0) || "T"}</AvatarFallback>
           </Avatar>
         </div>
       </header>
 
-      <main className="max-w-md mx-auto px-4 py-6" id="itinerary-content">
+      <main className="container-responsive max-w-md py-6 slide-up-animation" id="itinerary-content">
         {/* Trip Overview Card */}
         <section className="mb-6">
           <h2 className="text-lg font-medium mb-3">Your Upcoming Trip</h2>

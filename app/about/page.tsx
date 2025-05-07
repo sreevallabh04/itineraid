@@ -106,15 +106,15 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="sticky top-0 z-10 bg-black/90 backdrop-blur-lg border-b border-zinc-800 px-4 py-3">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-2">
+        <div className="container-responsive max-w-5xl mx-auto flex items-center justify-between">
+          <Link href="/dashboard" className="flex items-center gap-2 fade-in-animation">
             <ChevronLeftIcon className="h-5 w-5" />
             <h1 className="text-xl font-bold">About ItinerAid</h1>
           </Link>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
+      <main className="container-responsive max-w-5xl mx-auto py-6 slide-up-animation">
         {/* Hero Section */}
         <section className="mb-16">
           <div className="relative h-[40vh] rounded-2xl overflow-hidden mb-8">

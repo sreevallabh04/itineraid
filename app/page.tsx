@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
+import { AuthModal } from "@/components/auth/AuthModal"
 import {
   MapPinIcon,
   CalendarIcon,
@@ -34,6 +35,7 @@ export default function LandingPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [typedText, setTypedText] = useState("")
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const fullText = "Create Cinematic Travel Memories"
   
   // Background images for the slideshow
@@ -65,33 +67,23 @@ export default function LandingPage() {
     }
   }, [typedText])
 
-  const handleContinue = async () => {
+  const handleContinue = () => {
     setIsLoading(true)
-    try {
-      // Simulate authentication delay
-      await new Promise((resolve) => setTimeout(resolve, 800))
-
-      // Use selected destination or default to Tokyo
-      const selectedDestination = destination || "Tokyo"
-
-      // Store user data in localStorage to simulate authentication
-      localStorage.setItem(
-        "itineraid_user",
-        JSON.stringify({
-          name: "Traveler",
-          email: "traveler@example.com",
-          avatar: "",
-          isAuthenticated: true,
-          selectedDestination: selectedDestination
-        }),
-      )
-
-      router.push("/dashboard")
-    } catch (error) {
-      console.error("Error signing in", error)
-    } finally {
+    
+    // Use selected destination or default to Tokyo
+    const selectedDestination = destination || "Tokyo"
+    
+    // Brief delay for button animation
+    setTimeout(() => {
       setIsLoading(false)
-    }
+      // Open auth modal with selected destination
+      setIsAuthModalOpen(true)
+    }, 300)
+  }
+  
+  // Handle auth modal close
+  const handleAuthModalClose = () => {
+    setIsAuthModalOpen(false)
   }
 
   const popularDestinations = [
@@ -167,7 +159,7 @@ export default function LandingPage() {
           ))}
         </div>
         
-        <div className="w-full max-w-md mx-auto flex flex-col items-start px-4 z-10">
+        <div className="container-responsive max-w-md mx-auto flex flex-col items-start z-10 fade-in-animation">
 
           {/* Main Headline */}
           <motion.h1
@@ -520,6 +512,13 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </section>
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={isAuthModalOpen}
+        onClose={handleAuthModalClose}
+        defaultTab="login"
+        destination={destination || "Tokyo"}
+      />
     </div>
   )
 }

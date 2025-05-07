@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  /* Base colors */
   --background: 0 0% 0%;
   --foreground: 0 0% 100%;
   --card: 240 10% 3.9%;
@@ -22,12 +23,186 @@
   --border: 240 3.7% 15.9%;
   --input: 240 3.7% 15.9%;
   --ring: 240 4.9% 83.9%;
+  
+  /* Animation & UI */
   --radius: 0.5rem;
+  --transition-fast: 150ms;
+  --transition-normal: 250ms;
+  --transition-slow: 350ms;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+  
+  /* Spacing */
+  --page-padding-mobile: 1rem;
+  --page-padding-tablet: 2rem;
+  --page-padding-desktop: 3rem;
+  
+  /* Max widths for responsive containers */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
 }
 
-body {
-  background-color: black;
-  color: white;
+/* Base style enhancements */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  body {
+    background-color: black;
+    color: white;
+    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+    transition: background-color var(--transition-normal) ease-in-out;
+  }
+  
+  /* Interactive elements should have transitions */
+  a, button, input, select, textarea, [role="button"] {
+    transition: all var(--transition-fast) ease-in-out;
+  }
+  
+  /* Image loading and rendering improvements */
+  img {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
+}
+
+/* Component styles */
+@layer components {
+  /* Responsive container utilities */
+  .container-responsive {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--page-padding-mobile);
+    padding-right: var(--page-padding-mobile);
+    
+    @media (min-width: 640px) {
+      padding-left: var(--page-padding-tablet);
+      padding-right: var(--page-padding-tablet);
+      max-width: var(--container-sm);
+    }
+    
+    @media (min-width: 768px) {
+      max-width: var(--container-md);
+    }
+    
+    @media (min-width: 1024px) {
+      padding-left: var(--page-padding-desktop);
+      padding-right: var(--page-padding-desktop);
+      max-width: var(--container-lg);
+    }
+    
+    @media (min-width: 1280px) {
+      max-width: var(--container-xl);
+    }
+    
+    @media (min-width: 1536px) {
+      max-width: var(--container-2xl);
+    }
+  }
+  
+  /* Card hover effects */
+  .card-hover {
+    transition: transform var(--transition-normal) ease-out, box-shadow var(--transition-normal) ease-out;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  /* Button hover effects */
+  .button-hover {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .button-hover:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(100%);
+    transition: transform var(--transition-fast) ease-out;
+    z-index: -1;
+  }
+  
+  .button-hover:hover:after {
+    transform: translateY(0);
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+  /* Animations */
+  .fade-in-animation {
+    animation: fadeIn 0.5s ease-in-out forwards;
+  }
+  
+  .slide-up-animation {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+  
+  .zoom-in-animation {
+    animation: zoomIn 0.5s ease-out forwards;
+  }
+  
+  /* Responsive text utilities */
+  .text-responsive {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.5;
+  }
+  
+  .heading-responsive {
+    font-size: clamp(1.75rem, 5vw, 3.5rem);
+    line-height: 1.2;
+  }
+  
+  /* Hide scrollbar but allow scrolling */
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .animate-pulse-slow {
@@ -35,31 +210,56 @@ body {
 }
 
 @keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
 }
 
-/* Custom scrollbar for webkit browsers */
+/* Enhanced scrollbar styles */
 ::-webkit-scrollbar {
-  height: 4px;
-  width: 4px;
+  height: 5px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 10px;
+  transition: background var(--transition-fast) ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  .mobile-padding {
+    padding-left: var(--page-padding-mobile);
+    padding-right: var(--page-padding-mobile);
+  }
+  
+  /* Adjust font sizes for mobile */
+  h1 { font-size: clamp(1.75rem, 8vw, 2.25rem); }
+  h2 { font-size: clamp(1.5rem, 6vw, 1.75rem); }
+  h3 { font-size: clamp(1.25rem, 5vw, 1.5rem); }
+}
+
+/* Tablet-specific styles */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .tablet-padding {
+    padding-left: var(--page-padding-tablet);
+    padding-right: var(--page-padding-tablet);
+  }
+}
+
+/* Desktop-specific styles */
+@media (min-width: 1024px) {
+  .desktop-padding {
+    padding-left: var(--page-padding-desktop);
+    padding-right: var(--page-padding-desktop);
+  }
 }
